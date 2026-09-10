@@ -38,7 +38,21 @@ jobs:
             echo "NEXT_PUBLIC_BASE_PATH=/$repo" >> "$GITHUB_ENV"
           fi
 
-      - run: npm ci
+      # 素の `run: npm ci` だと失敗時の注釈が「exit code 1」だけで、
+      # ログ本文はリポジトリ管理者としてサインインしないと読めない。
+      # 失敗時は npm の出力を注釈として出し、外から原因を追えるようにする。
+      - name: npm ci
+        run: |
+          echo "node $(node -v) / npm $(npm -v)"
+          set +e
+          npm ci 2>&1 | tee /tmp/npm-ci.log
+          code=${PIPESTATUS[0]}
+          if [ "$code" -ne 0 ]; then
+            tail -10 /tmp/npm-ci.log | while IFS= read -r line; do
+              echo "::error::$line"
+            done
+          fi
+          exit "$code"
 
       - name: Build (db/lifelog.db を読んで out/ に静的化)
         run: npm run build:pages
