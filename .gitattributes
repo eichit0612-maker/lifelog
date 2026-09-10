@@ -1,0 +1,5 @@
+# SQLite の DB ファイルは必ずバイナリとして扱う。
+# Windows の autocrlf に巻き込まれて改行変換されると DB が壊れる。
+*.db      binary
+*.db-wal  binary
+*.db-shm  binary

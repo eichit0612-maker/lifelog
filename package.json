@@ -1,0 +1,35 @@
+{
+  "name": "lifelog",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "db:seed": "node scripts/seed.mjs",
+    "db:reset": "node -e \"require('node:fs').rmSync('db/lifelog.db',{force:true})\" && node scripts/seed.mjs",
+    "db:checkpoint": "node scripts/checkpoint.mjs",
+    "build:pages": "cross-env STATIC_EXPORT=1 next build",
+    "preview:pages": "npm run build:pages && npx serve out"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "next": "16.3.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "cross-env": "^10.1.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
