@@ -19,11 +19,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 22
+          # package-lock.json は npm 11 で生成されている。Node 22 だと同梱の npm 10 が
+          # 「@emnapi/* が lock に無い」と EUSAGE で落ちるため、npm 11 が入る Node 24 に揃える。
+          node-version: 24
           cache: npm
 
       - name: Resolve basePath
