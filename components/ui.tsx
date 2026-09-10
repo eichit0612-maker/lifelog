@@ -1,149 +1,112 @@
 import type { ReactNode } from "react";
 
-export function Card({
-  children,
-  className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <div
-      className={`rounded-xl border border-slate-200 bg-white shadow-sm transition
-                  hover:shadow-md dark:border-slate-800 dark:bg-slate-900 ${className}`}
-    >
-      {children}
-    </div>
-  );
-}
-
-export function StatCard({
-  label,
-  value,
-  unit,
-  sub,
-  accent,
-}: {
-  label: string;
-  value: string | number;
-  unit?: string;
-  sub?: string;
-  accent: string;
-}) {
-  return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-      <div className="flex items-center gap-2">
-        <span className={`h-2 w-2 rounded-full ${accent}`} />
-        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{label}</p>
-      </div>
-      <p className="mt-2 font-mono text-2xl font-semibold tabular-nums">
-        {value}
-        {unit && (
-          <span className="ml-1 text-sm font-normal text-slate-500 dark:text-slate-400">
-            {unit}
-          </span>
-        )}
-      </p>
-      {sub && <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{sub}</p>}
-    </div>
-  );
-}
-
-export function Badge({
-  children,
-  tone = "slate",
-}: {
-  children: ReactNode;
-  tone?: "slate" | "rose" | "emerald" | "amber" | "violet" | "sky" | "red";
-}) {
-  const tones: Record<string, string> = {
-    slate: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
-    rose: "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300",
-    emerald: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
-    amber: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
-    violet: "bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300",
-    sky: "bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300",
-    red: "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300",
-  };
-  return (
-    <span
-      className={`inline-flex items-center whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-medium ${tones[tone]}`}
-    >
-      {children}
-    </span>
-  );
-}
-
-export function Stars({ value }: { value: number | null }) {
-  if (value == null) {
-    return <span className="text-xs text-slate-400">未評価</span>;
-  }
-  return (
-    <span
-      className="text-sm tracking-tight text-amber-500"
-      aria-label={`5段階評価で${value}`}
-      title={`${value} / 5`}
-    >
-      {"★".repeat(value)}
-      <span className="text-slate-300 dark:text-slate-700">{"★".repeat(5 - value)}</span>
-    </span>
-  );
-}
-
-export function EmptyState({ message }: { message: string }) {
-  return (
-    <div className="rounded-xl border border-dashed border-slate-300 p-12 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
-      {message}
-    </div>
-  );
-}
-
-export function TabHeader({
-  title,
+/** 見出し。日本語の下に小さく欧文を添える。 */
+export function SectionHead({
+  ja,
+  en,
   count,
-  action,
+  note,
 }: {
-  title: string;
-  count: number;
-  action: string;
+  ja: string;
+  en: string;
+  count?: number;
+  note?: string;
 }) {
   return (
-    <div className="mb-4 flex items-center justify-between">
-      <h2 className="text-lg font-semibold">
-        {title}
-        <span className="ml-2 font-mono text-sm font-normal text-slate-500 dark:text-slate-400">
-          {count}
+    <header className="accent-rule mb-7">
+      <div className="flex items-baseline gap-3">
+        <h2 className="mincho text-xl tracking-wide">{ja}</h2>
+        <span className="latin text-xs uppercase tracking-[0.22em] text-ink-faint">
+          {en}
         </span>
-      </h2>
-      {/* モック段階では見た目のみ。登録フォームは次のステップで実装する。 */}
-      <button
-        type="button"
-        disabled
-        className="cursor-not-allowed rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-400 dark:border-slate-800 dark:text-slate-600"
-        title="登録フォームは未実装（モック）"
-      >
-        + {action}
-      </button>
+        {count !== undefined && (
+          <span className="latin ml-auto text-sm text-ink-muted">{count}</span>
+        )}
+      </div>
+      {note && <p className="mt-2 text-xs text-ink-muted">{note}</p>}
+    </header>
+  );
+}
+
+/** 通し番号。台帳の行番号のような役割。 */
+export function Index({ n }: { n: number }) {
+  return (
+    <span className="latin select-none text-sm text-ink-faint">
+      {String(n).padStart(2, "0")}
+    </span>
+  );
+}
+
+/** ラベル。囲みではなく、細い縦罫と小さな文字で示す。 */
+export function Tag({ children }: { children: ReactNode }) {
+  return (
+    <span className="border-l border-rule-firm pl-2 text-xs text-ink-muted">
+      {children}
+    </span>
+  );
+}
+
+/**
+ * 5段階評価。★を並べず、小さな升目を打つ。
+ * 未評価は「評価なし」と書かず、空の升目のまま置く。文字が並ぶと目障りなので。
+ */
+export function Rating({ value }: { value: number | null }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-[3px] ${value == null ? "opacity-45" : ""}`}
+      title={value == null ? "未評価" : `${value} / 5`}
+    >
+      {[1, 2, 3, 4, 5].map((i) => (
+        <span
+          key={i}
+          aria-hidden
+          className={`block h-[7px] w-[7px] ${
+            value != null && i <= value ? "bg-accent" : "border border-rule-firm"
+          }`}
+        />
+      ))}
+      <span className="sr-only">
+        {value == null ? "未評価" : `5段階評価で${value}`}
+      </span>
+    </span>
+  );
+}
+
+/** 日付。未入力は罫線だけを引いて「書ける場所」に見せる。 */
+export function DateText({ value }: { value: string | null }) {
+  if (!value) {
+    return (
+      <span
+        className="inline-block w-16 border-b border-dotted border-rule-firm align-middle"
+        title="未記入"
+      />
+    );
+  }
+  const [y, m, d] = value.split("-");
+  return (
+    <span className="latin text-sm text-ink-muted">
+      {y}<span className="mx-[2px] text-ink-faint">.</span>{m}
+      <span className="mx-[2px] text-ink-faint">.</span>{d}
+    </span>
+  );
+}
+
+export function DateRange({ start, end }: { start: string; end: string | null }) {
+  if (!end || end === start) return <DateText value={start} />;
+  return (
+    <span className="latin text-sm text-ink-muted">
+      <DateText value={start} />
+      <span className="mx-1 text-ink-faint">—</span>
+      <DateText value={end} />
+    </span>
+  );
+}
+
+/** 空のタブ。破線の箱は置かず、余白と一行の説明で見せる。 */
+export function EmptyNote({ children }: { children: ReactNode }) {
+  return (
+    <div className="border-t border-rule py-16 text-center">
+      <p className="mincho text-sm text-ink-muted">{children}</p>
     </div>
   );
-}
-
-export function formatDate(iso: string | null): string {
-  if (!iso) return "—";
-  const [y, m, d] = iso.split("-");
-  return `${y}/${m}/${d}`;
-}
-
-export function formatDateRange(start: string, end: string | null): string {
-  if (!end || end === start) return formatDate(start);
-  const sameYear = start.slice(0, 4) === end.slice(0, 4);
-  return `${formatDate(start)} 〜 ${sameYear ? end.slice(5).replace("-", "/") : formatDate(end)}`;
-}
-
-export function nightsLabel(start: string, end: string | null): string {
-  if (!end || end === start) return "日帰り";
-  const nights = Math.round(
-    (new Date(end).getTime() - new Date(start).getTime()) / 86_400_000
-  );
-  return `${nights}泊${nights + 1}日`;
 }

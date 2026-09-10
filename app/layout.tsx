@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { EB_Garamond } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+// 欧文・数字のみ。和文はシステムの明朝/ゴシックを使うので subsets は latin だけでよい。
+const ebGaramond = EB_Garamond({
+  variable: "--font-eb-garamond",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "Lifelog Dashboard",
-  description: "グルメ・旅行・バスケ・鑑賞ログをまとめる個人用ライフログ",
+  title: "記録帳 — Lifelog",
+  description: "食べたもの、行った場所、観た試合と作品の記録",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="ja"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+    <html lang="ja" className={`${ebGaramond.variable} h-full`}>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }

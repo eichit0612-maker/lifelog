@@ -1,99 +1,107 @@
 import type { BasketballGame, GameStatus } from "@/lib/types";
-import { Badge, Card, EmptyState, TabHeader, formatDate } from "../ui";
+import { EmptyNote, SectionHead } from "../ui";
 
 const STATUS_LABEL: Record<GameStatus, string> = {
   scheduled: "予定",
-  win: "勝ち",
-  lose: "負け",
-  draw: "引き分け",
+  win: "勝",
+  lose: "敗",
+  draw: "分",
   cancelled: "中止",
 };
 
-const STATUS_TONE = {
-  scheduled: "sky",
-  win: "emerald",
-  lose: "red",
-  draw: "slate",
-  cancelled: "slate",
-} as const;
+function Result({ game }: { game: BasketballGame }) {
+  const hasScore = game.our_score !== null && game.opponent_score !== null;
+
+  if (!hasScore) {
+    return (
+      <span
+        className={`text-xs ${
+          game.status === "cancelled" ? "text-ink-faint line-through" : "text-ink-muted"
+        }`}
+      >
+        {STATUS_LABEL[game.status]}
+      </span>
+    );
+  }
+
+  const won = game.status === "win";
+  return (
+    <span className="flex items-baseline gap-2">
+      <span className="latin text-lg tabular-nums">
+        {game.our_score}
+        <span className="mx-1 text-ink-faint">–</span>
+        {game.opponent_score}
+      </span>
+      <span
+        className={`mincho text-sm ${won ? "text-accent" : "text-ink-muted"}`}
+      >
+        {STATUS_LABEL[game.status]}
+      </span>
+    </span>
+  );
+}
 
 function GameRow({ game }: { game: BasketballGame }) {
-  const hasScore = game.our_score !== null && game.opponent_score !== null;
+  const [, m, d] = game.game_date.split("-");
   return (
-    <Card className="flex flex-wrap items-center gap-x-4 gap-y-2 p-4">
-      <div className="w-24 shrink-0">
-        <p className="font-mono text-sm">{formatDate(game.game_date)}</p>
+    <li className="grid grid-cols-[3.5rem_1fr] items-baseline gap-x-4 border-b border-rule py-5 sm:grid-cols-[4.5rem_1fr_auto] sm:gap-x-6">
+      <div className="latin text-ink-muted">
+        <span className="text-base tabular-nums">
+          {m}<span className="text-ink-faint">/</span>{d}
+        </span>
         {game.tip_off && (
-          <p className="font-mono text-xs text-slate-400">{game.tip_off}</p>
+          <div className="text-xs text-ink-faint tabular-nums">{game.tip_off}</div>
         )}
       </div>
 
-      <div className="min-w-40 flex-1">
-        <p className="font-semibold">vs {game.opponent}</p>
+      <div className="min-w-0">
+        <h4 className="mincho leading-snug">
+          {game.team}
+          <span className="mx-2 text-xs text-ink-faint">対</span>
+          {game.opponent}
+        </h4>
         {game.venue && (
-          <p className="text-xs text-slate-500 dark:text-slate-400">{game.venue}</p>
+          <p className="mt-1 text-xs text-ink-muted">{game.venue}</p>
         )}
+        {game.memo && <p className="mt-2 text-sm text-ink-muted">{game.memo}</p>}
       </div>
 
-      <div className="w-28 shrink-0 text-center">
-        {hasScore ? (
-          <p className="font-mono text-lg font-semibold tabular-nums">
-            {game.our_score}
-            <span className="mx-1 text-slate-400">-</span>
-            {game.opponent_score}
-          </p>
-        ) : (
-          <p className="font-mono text-sm text-slate-400">—</p>
-        )}
+      <div className="col-start-2 mt-2 sm:col-start-3 sm:mt-0 sm:text-right">
+        <Result game={game} />
       </div>
-
-      <div className="w-20 shrink-0 text-right">
-        <Badge tone={STATUS_TONE[game.status]}>{STATUS_LABEL[game.status]}</Badge>
-      </div>
-
-      {game.memo && (
-        <p className="w-full text-sm text-slate-600 dark:text-slate-300">{game.memo}</p>
-      )}
-    </Card>
+    </li>
   );
 }
 
 export default function BasketballTab({ items }: { items: BasketballGame[] }) {
-  const upcoming = items.filter((g) => g.status === "scheduled");
-  const finished = items.filter((g) => g.status !== "scheduled");
+  // リーグごとにまとめる。順序は登場順を保つ。
+  const leagues: { name: string; games: BasketballGame[] }[] = [];
+  for (const g of items) {
+    const name = g.league ?? "その他";
+    const found = leagues.find((l) => l.name === name);
+    if (found) found.games.push(g);
+    else leagues.push({ name, games: [g] });
+  }
 
   return (
     <section>
-      <TabHeader title="バスケ 試合" count={items.length} action="試合を追加" />
+      <SectionHead ja="籠球" en="Basketball" count={items.length} />
       {items.length === 0 ? (
-        <EmptyState message="まだ試合が登録されていません。" />
+        <EmptyNote>観る予定の試合がありません。</EmptyNote>
       ) : (
-        <div className="space-y-6">
-          <div>
-            <h3 className="mb-2 text-sm font-medium text-slate-500 dark:text-slate-400">
-              これからの予定
-            </h3>
-            {upcoming.length === 0 ? (
-              <EmptyState message="予定されている試合はありません。" />
-            ) : (
-              <div className="space-y-2">
-                {upcoming.map((g) => (
+        <div className="space-y-10">
+          {leagues.map((l) => (
+            <div key={l.name}>
+              <h3 className="latin mb-3 border-b border-rule-firm pb-1.5 text-xs uppercase tracking-[0.22em] text-ink-muted">
+                {l.name}
+              </h3>
+              <ol>
+                {l.games.map((g) => (
                   <GameRow key={g.id} game={g} />
                 ))}
-              </div>
-            )}
-          </div>
-
-          <div>
-            <h3 className="mb-2 text-sm font-medium text-slate-500 dark:text-slate-400">
-              過去の試合
-            </h3>
-            <div className="space-y-2">
-              {finished.map((g) => (
-                <GameRow key={g.id} game={g} />
-              ))}
+              </ol>
             </div>
-          </div>
+          ))}
         </div>
       )}
     </section>

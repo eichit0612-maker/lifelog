@@ -1,34 +1,48 @@
 import type { Trip } from "@/lib/types";
-import { Badge, Card, EmptyState, TabHeader, formatDateRange, nightsLabel } from "../ui";
+import { DateRange, EmptyNote, Index, SectionHead, Tag } from "../ui";
+
+function nights(start: string, end: string | null): string {
+  if (!end || end === start) return "日帰り";
+  const n = Math.round(
+    (new Date(end).getTime() - new Date(start).getTime()) / 86_400_000
+  );
+  return `${n}泊${n + 1}日`;
+}
 
 export default function TripsTab({ items }: { items: Trip[] }) {
   return (
     <section>
-      <TabHeader title="旅行記録" count={items.length} action="旅行を追加" />
+      <SectionHead ja="旅" en="Travel" count={items.length} />
       {items.length === 0 ? (
-        <EmptyState message="まだ旅行の記録がありません。" />
+        <EmptyNote>行った場所はこれから書き足していきます。</EmptyNote>
       ) : (
-        <ol className="relative space-y-3 border-l border-slate-200 pl-6 dark:border-slate-800">
-          {items.map((t) => (
-            <li key={t.id} className="relative">
-              <span className="absolute -left-[1.9rem] top-5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-4 ring-slate-50 dark:ring-slate-950" />
-              <Card className="p-4">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="font-semibold">{t.title ?? t.place}</h3>
-                  <span className="font-mono text-xs text-slate-500 dark:text-slate-400">
-                    {formatDateRange(t.start_date, t.end_date)}
-                  </span>
-                </div>
-                <div className="mt-2 flex flex-wrap items-center gap-2">
-                  <Badge tone="emerald">{t.place}</Badge>
-                  <Badge>{nightsLabel(t.start_date, t.end_date)}</Badge>
+        <ol className="border-t border-rule">
+          {items.map((t, i) => (
+            <li
+              key={t.id}
+              className="grid grid-cols-[2rem_1fr] gap-x-4 border-b border-rule py-6
+                         sm:grid-cols-[2.5rem_1fr_auto] sm:gap-x-6"
+            >
+              <div className="pt-1">
+                <Index n={i + 1} />
+              </div>
+
+              <div className="min-w-0">
+                <h3 className="mincho text-lg leading-snug">{t.title ?? t.place}</h3>
+                <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <Tag>{t.place}</Tag>
+                  <Tag>{nights(t.start_date, t.end_date)}</Tag>
                 </div>
                 {t.memo && (
-                  <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                  <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-muted">
                     {t.memo}
                   </p>
                 )}
-              </Card>
+              </div>
+
+              <div className="col-start-2 mt-3 sm:col-start-3 sm:mt-1 sm:text-right">
+                <DateRange start={t.start_date} end={t.end_date} />
+              </div>
             </li>
           ))}
         </ol>

@@ -45,6 +45,8 @@ CREATE INDEX IF NOT EXISTS idx_trips_start_date ON trips (start_date DESC);
 
 -- ------------------------------------------------------------
 -- 3. バスケの試合予定・結果（日付、対戦相手、ステータス、スコア）
+--    観戦記録なので「どのチームを応援して観たか」を team に持つ。
+--    status は team から見た勝敗。
 --    status = 'scheduled'（予定）のときスコアは NULL、
 --    'win' / 'lose' / 'draw'（結果確定）のときはスコア必須。
 -- ------------------------------------------------------------
@@ -52,11 +54,13 @@ CREATE TABLE IF NOT EXISTS basketball_games (
   id             INTEGER PRIMARY KEY AUTOINCREMENT,
   game_date      TEXT    NOT NULL CHECK (game_date GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
   tip_off        TEXT    CHECK (tip_off IS NULL OR tip_off GLOB '[0-2][0-9]:[0-5][0-9]'),  -- 開始時刻
+  team           TEXT    NOT NULL,                    -- 応援・観戦するチーム
   opponent       TEXT    NOT NULL,                    -- 対戦相手
+  league         TEXT,                                -- B.LEAGUE / NBA など
   venue          TEXT,                                -- 会場
   status         TEXT    NOT NULL DEFAULT 'scheduled'
                          CHECK (status IN ('scheduled', 'win', 'lose', 'draw', 'cancelled')),
-  our_score      INTEGER CHECK (our_score IS NULL OR our_score >= 0),
+  our_score      INTEGER CHECK (our_score IS NULL OR our_score >= 0),   -- team 側の得点
   opponent_score INTEGER CHECK (opponent_score IS NULL OR opponent_score >= 0),
   memo           TEXT,
   created_at     TEXT    NOT NULL DEFAULT (datetime('now', 'localtime')),
@@ -81,6 +85,7 @@ CREATE TABLE IF NOT EXISTS basketball_games (
 
 CREATE INDEX IF NOT EXISTS idx_games_date   ON basketball_games (game_date DESC);
 CREATE INDEX IF NOT EXISTS idx_games_status ON basketball_games (status);
+CREATE INDEX IF NOT EXISTS idx_games_league ON basketball_games (league);
 
 -- ------------------------------------------------------------
 -- 4. 映画・アニメ鑑賞ログ（タイトル、ジャンル、視聴日、評価、ひとこと感想）
@@ -91,7 +96,8 @@ CREATE TABLE IF NOT EXISTS watch_logs (
   media_type  TEXT    NOT NULL DEFAULT 'movie'
                       CHECK (media_type IN ('movie', 'anime', 'drama')),
   genre       TEXT,                                   -- SF、コメディ…
-  watched_on  TEXT    NOT NULL CHECK (watched_on GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
+  -- 視聴日は任意。タイトルだけ先に登録しておける（NULL = これから観る / 日付未記入）。
+  watched_on  TEXT    CHECK (watched_on IS NULL OR watched_on GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
   rating      INTEGER CHECK (rating BETWEEN 1 AND 5),
   comment     TEXT,                                   -- ひとこと感想
   created_at  TEXT    NOT NULL DEFAULT (datetime('now', 'localtime')),

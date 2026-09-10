@@ -31,7 +31,9 @@ export type BasketballGame = {
   id: number;
   game_date: string;
   tip_off: string | null;
+  team: string;
   opponent: string;
+  league: string | null;
   venue: string | null;
   status: GameStatus;
   our_score: number | null;
@@ -46,7 +48,7 @@ export type WatchLog = {
   title: string;
   media_type: MediaType;
   genre: string | null;
-  watched_on: string;
+  watched_on: string | null;
   rating: number | null;
   comment: string | null;
   created_at: string;

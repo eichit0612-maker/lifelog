@@ -1,8 +1,39 @@
 @import "tailwindcss";
 
-@theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/*
+  記録帳をイメージした配色。
+  グレーではなく、わずかに黄みを含んだ紙色と墨色を使う。
+  差し色は朱色ひとつだけに絞り、罫線と余白で構造を作る。
+*/
+@theme {
+  --color-paper:      #faf8f4;  /* 地 */
+  --color-paper-sunk: #f2eee6;  /* 一段沈んだ面 */
+  --color-ink:        #221e18;  /* 本文 */
+  --color-ink-muted:  #6d6459;  /* 補助情報 */
+  --color-ink-faint:  #9c9285;  /* 未入力・日付 */
+  --color-rule:       #e0d8c9;  /* 罫線 */
+  --color-rule-firm:  #c8bda9;  /* 強い罫線 */
+  --color-accent:     #a8432c;  /* 朱 */
+
+  /* 和文はシステムのフォントを使う。Google Fonts の日本語は数MB単位になり、
+     静的エクスポートに載せるには重すぎるため。 */
+  --font-mincho: "Hiragino Mincho ProN", "Yu Mincho", YuMincho, "MS PMincho", serif;
+  --font-gothic: "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, Meiryo, sans-serif;
+  /* 欧文と数字だけ EB Garamond。和文の明朝と同じオールドスタイル系で揃う。 */
+  --font-latin: var(--font-eb-garamond), Georgia, serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper:      #17140f;
+    --color-paper-sunk: #1f1b15;
+    --color-ink:        #e9e3d6;
+    --color-ink-muted:  #a49a89;
+    --color-ink-faint:  #6f6759;
+    --color-rule:       #322c22;
+    --color-rule-firm:  #4a4234;
+    --color-accent:     #d2705a;
+  }
 }
 
 html {
@@ -10,5 +41,29 @@ html {
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-gothic);
+  font-feature-settings: "palt" 1;   /* 和文の詰め */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 数字と欧文は Garamond に落とす。日付やスコアの表情が変わる。 */
+.latin {
+  font-family: var(--font-latin);
+  font-feature-settings: "onum" 1, "kern" 1;
+}
+
+.mincho {
+  font-family: var(--font-mincho);
+}
+
+/* 見出しの上に置く細い朱線 */
+.accent-rule::before {
+  content: "";
+  display: block;
+  width: 1.75rem;
+  height: 2px;
+  background-color: var(--color-accent);
+  margin-bottom: 0.75rem;
 }

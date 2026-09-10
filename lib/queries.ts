@@ -12,8 +12,9 @@ import type {
 export function listGourmet(): Gourmet[] {
   return getDb()
     .prepare(
+      // 日付があるものを新しい順に。未記入は末尾へ、登録した順のまま並べる。
       `SELECT * FROM gourmet
-       ORDER BY COALESCE(visited_on, created_at) DESC, id DESC`
+       ORDER BY visited_on IS NULL, visited_on DESC, id ASC`
     )
     .all() as Gourmet[];
 }
@@ -40,7 +41,11 @@ export function listGames(): BasketballGame[] {
 
 export function listWatchLogs(): WatchLog[] {
   return getDb()
-    .prepare(`SELECT * FROM watch_logs ORDER BY watched_on DESC, id DESC`)
+    .prepare(
+      // 視聴日があるものを新しい順に。未記入は末尾へ、登録した順のまま並べる。
+      `SELECT * FROM watch_logs
+       ORDER BY watched_on IS NULL, watched_on DESC, id ASC`
+    )
     .all() as WatchLog[];
 }
 

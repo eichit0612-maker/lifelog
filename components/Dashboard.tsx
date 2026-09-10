@@ -2,71 +2,86 @@
 
 import { useState } from "react";
 import type { DashboardData, TabKey } from "@/lib/types";
-import { StatCard } from "./ui";
 import GourmetTab from "./tabs/GourmetTab";
 import TripsTab from "./tabs/TripsTab";
 import BasketballTab from "./tabs/BasketballTab";
 import WatchTab from "./tabs/WatchTab";
 
-const TABS: { key: TabKey; label: string; icon: string; active: string }[] = [
-  { key: "gourmet", label: "グルメ", icon: "🍜", active: "border-rose-500 text-rose-600 dark:text-rose-400" },
-  { key: "trips", label: "旅行記録", icon: "🧳", active: "border-emerald-500 text-emerald-600 dark:text-emerald-400" },
-  { key: "basketball", label: "バスケ", icon: "🏀", active: "border-amber-500 text-amber-600 dark:text-amber-400" },
-  { key: "watch", label: "鑑賞ログ", icon: "🎬", active: "border-violet-500 text-violet-600 dark:text-violet-400" },
+const TABS: { key: TabKey; label: string }[] = [
+  { key: "gourmet", label: "グルメ" },
+  { key: "trips", label: "旅行" },
+  { key: "basketball", label: "バスケ" },
+  { key: "watch", label: "鑑賞" },
 ];
 
-function round1(n: number | null): string {
-  return n == null ? "—" : n.toFixed(1);
+/** 見出し下の数字。値が無いものは出さず、空欄を並べない。 */
+function Figure({ label, value, sub }: { label: string; value: number; sub?: string }) {
+  return (
+    <div className="flex items-baseline gap-2">
+      <span className="mincho text-sm text-ink-muted">{label}</span>
+      <span className="latin text-lg tabular-nums">{value}</span>
+      {sub && <span className="text-xs text-ink-faint">{sub}</span>}
+    </div>
+  );
 }
 
-export default function Dashboard({ data }: { data: DashboardData }) {
+export default function Dashboard({
+  data,
+  updatedAt,
+}: {
+  data: DashboardData;
+  updatedAt: string;
+}) {
   const [tab, setTab] = useState<TabKey>("gourmet");
   const { stats } = data;
   const { win, lose, draw } = stats.gameRecord;
+  const hasRecord = win + lose + draw > 0;
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight">Lifelog Dashboard</h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          食べたもの・行った場所・試合・観た作品を 1 か所にまとめる
+    <div className="mx-auto w-full max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
+      <header>
+        <p className="latin text-[0.7rem] uppercase tracking-[0.3em] text-ink-faint">
+          Lifelog
         </p>
+        <div className="mt-2 flex items-baseline justify-between gap-4">
+          <h1 className="mincho text-3xl tracking-[0.08em]">記録帳</h1>
+          <p className="latin text-xs text-ink-faint">
+            更新 {updatedAt.replace(/-/g, ".")}
+          </p>
+        </div>
+
+        <div className="mt-6 flex flex-wrap items-baseline gap-x-7 gap-y-2 border-y border-rule py-3">
+          <Figure
+            label="食"
+            value={stats.gourmetCount}
+            sub={
+              stats.gourmetAvgRating != null
+                ? `平均 ${stats.gourmetAvgRating.toFixed(1)}`
+                : undefined
+            }
+          />
+          <Figure label="旅" value={stats.tripCount} />
+          <Figure
+            label="籠球"
+            value={stats.upcomingGameCount + win + lose + draw}
+            sub={hasRecord ? `${win}勝${lose}敗` : undefined}
+          />
+          <Figure
+            label="観"
+            value={stats.watchCount}
+            sub={
+              stats.watchAvgRating != null
+                ? `平均 ${stats.watchAvgRating.toFixed(1)}`
+                : undefined
+            }
+          />
+        </div>
       </header>
 
-      <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatCard
-          label="お店"
-          value={stats.gourmetCount}
-          unit="件"
-          sub={`平均評価 ${round1(stats.gourmetAvgRating)}`}
-          accent="bg-rose-500"
-        />
-        <StatCard
-          label="旅行"
-          value={stats.tripCount}
-          unit="回"
-          sub={`${stats.tripPlaceCount} か所`}
-          accent="bg-emerald-500"
-        />
-        <StatCard
-          label="戦績"
-          value={`${win}勝${lose}敗${draw > 0 ? `${draw}分` : ""}`}
-          sub={`予定 ${stats.upcomingGameCount} 試合`}
-          accent="bg-amber-500"
-        />
-        <StatCard
-          label="鑑賞"
-          value={stats.watchCount}
-          unit="本"
-          sub={`平均評価 ${round1(stats.watchAvgRating)}`}
-          accent="bg-violet-500"
-        />
-      </div>
-
-      <div
+      <nav
         role="tablist"
-        aria-label="ライフログのカテゴリ"
-        className="mb-6 flex gap-1 overflow-x-auto border-b border-slate-200 dark:border-slate-800"
+        aria-label="記録の種類"
+        className="mt-10 flex gap-7 border-b border-rule"
       >
         {TABS.map((t) => {
           const selected = t.key === tab;
@@ -79,27 +94,29 @@ export default function Dashboard({ data }: { data: DashboardData }) {
               aria-selected={selected}
               aria-controls={`panel-${t.key}`}
               onClick={() => setTab(t.key)}
-              className={`-mb-px whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition ${
+              className={`mincho -mb-px cursor-pointer border-b-2 pb-2.5 text-sm tracking-wide transition-colors ${
                 selected
-                  ? t.active
-                  : "border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                  ? "border-accent text-ink"
+                  : "border-transparent text-ink-faint hover:text-ink-muted"
               }`}
             >
-              <span className="mr-1.5" aria-hidden>
-                {t.icon}
-              </span>
               {t.label}
             </button>
           );
         })}
-      </div>
+      </nav>
 
-      <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`}>
+      <main
+        role="tabpanel"
+        id={`panel-${tab}`}
+        aria-labelledby={`tab-${tab}`}
+        className="pt-10"
+      >
         {tab === "gourmet" && <GourmetTab items={data.gourmet} />}
         {tab === "trips" && <TripsTab items={data.trips} />}
         {tab === "basketball" && <BasketballTab items={data.games} />}
         {tab === "watch" && <WatchTab items={data.watchLogs} />}
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

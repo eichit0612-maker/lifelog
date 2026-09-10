@@ -6,5 +6,7 @@ import { getDashboardData } from "@/lib/queries";
 //  - dev / start : 書き込み後に revalidatePath で作り直す
 export default function Page() {
   const data = getDashboardData();
-  return <Dashboard data={data} />;
+  // 静的サイトなので「最終更新 = 最後にビルドした日」になる。
+  const updatedAt = new Date().toISOString().slice(0, 10);
+  return <Dashboard data={data} updatedAt={updatedAt} />;
 }
