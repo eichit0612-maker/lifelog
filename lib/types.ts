@@ -35,6 +35,7 @@ export type BasketballGame = {
   opponent: string;
   league: string | null;
   venue: string | null;
+  is_home: number | null;
   status: GameStatus;
   our_score: number | null;
   opponent_score: number | null;

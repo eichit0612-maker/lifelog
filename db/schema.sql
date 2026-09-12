@@ -56,8 +56,9 @@ CREATE TABLE IF NOT EXISTS basketball_games (
   tip_off        TEXT    CHECK (tip_off IS NULL OR tip_off GLOB '[0-2][0-9]:[0-5][0-9]'),  -- 開始時刻
   team           TEXT    NOT NULL,                    -- 応援・観戦するチーム
   opponent       TEXT    NOT NULL,                    -- 対戦相手
-  league         TEXT,                                -- B.LEAGUE / NBA など
+  league         TEXT,                                -- B.PREMIER / NBA など
   venue          TEXT,                                -- 会場
+  is_home        INTEGER CHECK (is_home IN (0, 1)),   -- team から見たホーム/アウェイ
   status         TEXT    NOT NULL DEFAULT 'scheduled'
                          CHECK (status IN ('scheduled', 'win', 'lose', 'draw', 'cancelled')),
   our_score      INTEGER CHECK (our_score IS NULL OR our_score >= 0),   -- team 側の得点
