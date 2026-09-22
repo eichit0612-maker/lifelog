@@ -27,6 +27,20 @@ export type Trip = {
   updated_at: string;
 };
 
+export type SetlistSong = {
+  id: number;
+  trip_id: number;
+  performed_on: string;
+  act_no: number;
+  artist: string;
+  stage: string | null;
+  song_no: number;
+  title: string;
+  url: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export type BasketballGame = {
   id: number;
   game_date: string;
@@ -72,6 +86,7 @@ export type DashboardStats = {
 export type DashboardData = {
   gourmet: Gourmet[];
   trips: Trip[];
+  setlist: SetlistSong[];
   games: BasketballGame[];
   watchLogs: WatchLog[];
   stats: DashboardStats;

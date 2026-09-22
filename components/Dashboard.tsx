@@ -113,7 +113,9 @@ export default function Dashboard({
         className="pt-10"
       >
         {tab === "gourmet" && <GourmetTab items={data.gourmet} />}
-        {tab === "trips" && <TripsTab items={data.trips} />}
+        {tab === "trips" && (
+          <TripsTab items={data.trips} setlist={data.setlist} />
+        )}
         {tab === "basketball" && <BasketballTab items={data.games} />}
         {tab === "watch" && <WatchTab items={data.watchLogs} />}
       </main>

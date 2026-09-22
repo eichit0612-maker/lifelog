@@ -1,0 +1,181 @@
+{
+  "_source": "https://docs.google.com/spreadsheets/d/11rrjhfbRDwv8I-_tz5oxPuvAOlpjz64fqvDd22P2zRs/edit （2026-09-22 時点）",
+  "_note": "YouTube の ?si= 追跡パラメータは除去してある。曲順・表記はシートのまま。",
+  "trip": {
+    "title": "イナズマロック フェス 2026",
+    "place": "滋賀県草津市 烏丸半島",
+    "start_date": "2026-09-19",
+    "end_date": "2026-09-21"
+  },
+  "acts": [
+    { "date": "2026-09-19", "artist": "山内惠介", "stage": "雷神STAGE", "songs": [
+      ["恋する街角", "https://youtu.be/ofrdJ-X1qsE"],
+      ["闇にご用心", "https://youtu.be/lWXMYLd4iyY"],
+      ["この世は祭り", "https://youtu.be/uBdtvuZeGUI"]
+    ]},
+    { "date": "2026-09-19", "artist": "ONE N' ONLY", "stage": "風神STAGE", "songs": [
+      ["Samba de Night Fever", "https://youtu.be/fEiWFS9hoNM"],
+      ["Fiesta", "https://youtu.be/XEzi7m6eQvs"],
+      ["OPEN", "https://youtu.be/DT5T1JgTYKQ"],
+      ["YOUNG BLOOD", "https://youtu.be/2ZAFaODRR0Q"],
+      ["Golden Sun", "https://youtu.be/B4TbkzL8Wo0"],
+      ["イタズラSummer", "https://youtu.be/CK7Dxtsd6AU"],
+      ["EVOL", "https://youtu.be/RdwMYAsbAlg"]
+    ]},
+    { "date": "2026-09-19", "artist": "RAISE A SUILEN", "stage": "雷神STAGE", "songs": [
+      ["UNSTOPPABLE", "https://youtu.be/O4pKdZP3HKs"],
+      ["Drown Out the Noise and Push Through the Trash", "https://youtu.be/EELGtL1U1vw"],
+      ["RUNAWY STAR", "https://youtu.be/DkMyx_sLMlk"],
+      ["灼熱 Bonfire!", "https://youtu.be/Uh2MjQ9Q324"],
+      ["V.I.P MONSTER", "https://youtu.be/DP5hEbta_Tc"],
+      ["WHAT AN EXPLOSION", "https://youtu.be/5AL7kBxbMI8"],
+      ["!NVADE SHOW!", "https://youtu.be/eLpe02tbeYU"],
+      ["HELL! or HELL?", "https://youtu.be/xalGIIeyPLo"]
+    ]},
+    { "date": "2026-09-19", "artist": "GENERATIONS", "stage": "雷神STAGE", "songs": [
+      ["Two Steps Back", "https://youtu.be/XeBuuTeLigQ"],
+      ["Sing it Loud", "https://youtu.be/8ARSs6K-Z9Q"],
+      ["Hard Knock Days", "https://youtu.be/JHuX1qCLK-4"],
+      ["SUMMER TIME LOVE", "https://youtu.be/Biyf7gB51Dk"],
+      ["Summer Vacation", "https://youtu.be/q0WrFNwoqkg"],
+      ["AGEHA(w/ 西川貴教)", "https://youtu.be/SkYqrivjj2E"],
+      ["Y.M.C.A.", "https://youtu.be/MBrDKttuhQ0"],
+      ["NOW or NEVER(w/ PSYCHIC FEVER)", "https://youtu.be/RgWT1RdmFNw"]
+    ]},
+    { "date": "2026-09-19", "artist": "ももいろクローバーZ", "stage": "風神STAGE", "songs": [
+      ["仮想ディストピア", "https://youtu.be/jlQ9UjM_1d8"],
+      ["ワニとシャンプー", "https://youtu.be/2y51enVLVbs"],
+      ["GODSPEED", "https://youtu.be/yle6mFfUpow"],
+      ["会心の一劇", "https://youtu.be/S5BYg1_0u7M"],
+      ["キミノアト", "https://youtu.be/60Lm2g14fms"],
+      ["行くぜっ！怪盗少女", "https://youtu.be/u7z9M0vFPbI"],
+      ["ボンボン☆サンバ☆ボンバYeah！", "https://youtu.be/NHnPfJDoEJM"],
+      ["HOT LIMIT", "https://youtu.be/vBmU5v2EyxM"]
+    ]},
+    { "date": "2026-09-19", "artist": "T.M.Revolution", "stage": "雷神STAGE", "songs": [
+      ["Save The One, Save The All", "https://youtu.be/p4Jea72H-2o"],
+      ["resonance", "https://youtu.be/0Fn1Z2iKtUg"],
+      ["crosswise", "https://youtu.be/6vShQ_G7zBQ"],
+      ["Naked arms", "https://youtu.be/TPFPAbN4ssE"],
+      ["SWORD SUMMIT", "https://youtu.be/vSOgA-EEZBc"],
+      ["FLAGS", "https://youtu.be/v4vOhyTeZFI"],
+      ["Thousands Morning Refrain", "https://youtu.be/1bnvzYYhfL8"],
+      ["HIGH PRESSURE", "https://youtu.be/RlV6cvhC8U0"],
+      ["HOT LIMIT", "https://youtu.be/vBmU5v2EyxM"]
+    ]},
+
+    { "date": "2026-09-20", "artist": "Hearts2Hearts", "stage": "雷神STAGE", "songs": [
+      ["RUDE(JP)", "https://youtu.be/F7sGJVUrkjQ"],
+      ["Focus", "https://youtu.be/Ur7aK4FvK-U"],
+      ["The Chase", "https://youtu.be/kxUA2wwYiME"],
+      ["STYLE", "https://youtu.be/NLjMZJKMOIc"],
+      ["Lemon Tang(JP)", "https://youtu.be/1VqxWNwgf5Q"],
+      ["ICONIC HEART", "https://youtu.be/chl0R8C4NJ8"]
+    ]},
+    { "date": "2026-09-20", "artist": "≠ME", "stage": "風神STAGE", "songs": [
+      ["Overture", "https://youtu.be/DV6SLzrbc6k"],
+      ["愛くださいませ", "https://youtu.be/TKwquEKR6zU"],
+      ["喝采パレード", "https://youtu.be/AUChW4SSwdM"],
+      ["す、好きじゃない！", "https://youtu.be/D4OAx2ALK34"],
+      ["クルクルかき氷", "https://youtu.be/zEJD7K1-IZM"],
+      ["きゅんかわ人生", "https://youtu.be/L8AQC1Gk4-M"],
+      ["Summer haze", "https://youtu.be/iIcpiUg_7NQ"],
+      ["ここでファーストキッス", "https://youtu.be/UQ8-9SKYApo"],
+      ["ラストチャンス、ラストダンス", "https://youtu.be/TN--u8kgVM0"]
+    ]},
+    { "date": "2026-09-20", "artist": "WANDS", "stage": "雷神STAGE", "songs": [
+      ["Shooting star", "https://youtu.be/Uuax56IVmXY"],
+      ["時の扉", "https://youtu.be/nqbydZfn9DY"],
+      ["愛を語るより口づけをかわそう", "https://youtu.be/bqtxGzXVh2c"],
+      ["真っ赤なLip", "https://youtu.be/BMZllL1SEgg"],
+      ["世界が終るまでは… (feat.西川貴教)", "https://youtu.be/1Bk9YpwWEsg"],
+      ["大胆", "https://youtu.be/elreixevI9o"]
+    ]},
+    { "date": "2026-09-20", "artist": "RIIZE", "stage": "雷神STAGE", "songs": [
+      ["All of You", "https://youtu.be/yfKBI5l81-A"],
+      ["Boom Boom Bass", "https://youtu.be/z3mhB8jHNdM"],
+      ["Flashlight", "https://youtu.be/hE2bPb0wPGk"],
+      ["Sunburst", "https://youtu.be/RsDXsGIst-s"],
+      ["Fly Up", "https://youtu.be/y4H13rSzHl0"],
+      ["Do your dance", "https://youtu.be/HDGCTtuW-Yo"],
+      ["Bad Bag Back", "https://youtu.be/vmL-XgxwQZU"]
+    ]},
+    { "date": "2026-09-20", "artist": "西川貴教", "stage": "風神STAGE", "songs": [
+      ["Ignis -イグニス-", "https://youtu.be/udu20N9Wn8g"],
+      ["祖逖乃誓", "https://youtu.be/sDMOWsEcahE"],
+      ["Freedom", "https://youtu.be/W3YfiVGSbus"],
+      ["BEYOND THE TIME -メビウスの宇宙を越えて-", "https://youtu.be/InPGzqxwlFg"],
+      ["残響≠ブラスター", "https://youtu.be/ihJfkOT_0wU"],
+      ["Be Affected", "https://youtu.be/fYvergrB3p8"],
+      ["Energy Overflow", "https://youtu.be/-_S2DM0PObw"]
+    ]},
+
+    { "date": "2026-09-21", "artist": "OWV", "stage": "風神STAGE", "songs": [
+      ["Gamer", "https://youtu.be/rKEsJmJpEFg"],
+      ["新曲らしい？", null],
+      ["Summer Days", "https://youtu.be/jY2b7J71QUE"],
+      ["LOVE BANDITZ", "https://youtu.be/mhBQWhBK7Go"]
+    ]},
+    { "date": "2026-09-21", "artist": "Chevon", "stage": "雷神STAGE", "songs": [
+      ["FLASH BACK!!!!!!!!", "https://youtu.be/9qevjbq4ELM"],
+      ["冥冥", "https://youtu.be/cJSttNbgqJI"],
+      ["春の亡霊", "https://youtu.be/s-PgA6cnJDs"],
+      ["さよならになりました", "https://youtu.be/jQIoj7fb1ZI"],
+      ["B612", "https://youtu.be/BOqzYlpog5c"],
+      ["銃電中", "https://youtu.be/orGJfJ2cEG4"],
+      ["ダンス・デカダンス", "https://youtu.be/nJ_jkiYmDR0"]
+    ]},
+    { "date": "2026-09-21", "artist": "MONGOL800", "stage": "雷神STAGE", "songs": [
+      ["あなたに", "https://youtu.be/lWbJFp_OSSg"],
+      ["DON'T WORRY BE HAPPY", "https://youtu.be/gS0W3qfJHKQ"],
+      ["OKINAWA CALLING", "https://youtu.be/RHg7wlfX9uU"],
+      ["小さな恋のうた", "https://youtu.be/JoJ6lnF07U4"],
+      ["琉球愛歌", "https://youtu.be/fuu0sY6ho0g"]
+    ]},
+    { "date": "2026-09-21", "artist": "フレデリック", "stage": "雷神STAGE", "songs": [
+      ["オドループ", "https://youtu.be/PCp2iXA1uLE"],
+      ["Happiness", "https://youtu.be/ZOgXQ9cpA20"],
+      ["ナンセンスナンセンス", "https://youtu.be/SYUEe-U6e5c"],
+      ["ジャンキー", "https://youtu.be/VTUgZ3-Ovws"],
+      ["CYAN", "https://youtu.be/mVdlbpV0WG8"],
+      ["スパークルダンサー", "https://youtu.be/CSaaKLSmeyU"]
+    ]},
+    { "date": "2026-09-21", "artist": "-真天地開闢集団-ジグザグ", "stage": "風神STAGE", "songs": [
+      ["復讐は正義", "https://youtu.be/2nfHgpHMKgA"],
+      ["燦然世界", "https://youtu.be/NP46_xNTBWQ"],
+      ["Drip", "https://youtu.be/EEd2O4MR89Y"],
+      ["P0WER-悪霊退散-", "https://youtu.be/bezvNBpQk0E"],
+      ["最高だZ", "https://youtu.be/SM9rUnU3nyk"],
+      ["JAPPARAPAN", "https://youtu.be/ZWH4U2R9Tl4"],
+      ["きちゅねのよめいり", "https://youtu.be/1CuAflw7yKA"],
+      ["Promise", "https://youtu.be/IsNup-bXLE8"]
+    ]},
+    { "date": "2026-09-21", "artist": "abingdon boys school", "stage": "雷神STAGE", "songs": [
+      ["DESIRE", "https://youtu.be/_Sbkr39yFA4"],
+      ["STRENGTH.", "https://youtu.be/Xs890BFWQfY"],
+      ["HOWLING", "https://youtu.be/3Hg-tIitXkU"],
+      ["SIREN", "https://youtu.be/3VsvlpNLlNg"],
+      ["Fre@K $ HoW", "https://youtu.be/Zy9Aw58BrmE"],
+      ["JAP", "https://youtu.be/BTm3L7hZyDs"]
+    ]},
+    { "date": "2026-09-21", "artist": "T.M.Revolution with DJ Yamato", "stage": "風神STAGE", "songs": [
+      ["LEVEL 4", "https://youtu.be/L4sxlHtxeF0"],
+      ["HOT LIMIT", "https://youtu.be/vBmU5v2EyxM"],
+      ["WHITE BREATH", "https://youtu.be/Xnws-1Oz4kM"]
+    ]},
+    { "date": "2026-09-21", "artist": "T.M.Revolution", "stage": "雷神STAGE", "songs": [
+      ["HEAT CAPACITY", "https://youtu.be/dR37s472yjs"],
+      ["臍淑女-ヴィーナス-", "https://youtu.be/y_3dqGYqZ8g"],
+      ["Summer Blizzard", "https://youtu.be/NKKpSqi0s2I"],
+      ["HIGH PRESSURE", "https://youtu.be/RlV6cvhC8U0"],
+      ["WILD RUSH", "https://youtu.be/AB0cNkrxsSM"]
+    ]},
+    { "date": "2026-09-21", "artist": "高気圧ブラザーズ(アンコール)", "stage": "風神STAGE", "songs": [
+      ["HOT LIMIT", "https://youtu.be/vBmU5v2EyxM"]
+    ]},
+    { "date": "2026-09-21", "artist": "T.M.Revolution(アンコール)", "stage": "雷神STAGE", "songs": [
+      ["HOT LIMIT", "https://youtu.be/vBmU5v2EyxM"],
+      ["Lakers", "https://youtu.be/ydeCKygnsB0"]
+    ]}
+  ]
+}

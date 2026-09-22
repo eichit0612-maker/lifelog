@@ -2,6 +2,7 @@ import "server-only";
 import { getDb } from "./db";
 import type {
   BasketballGame,
+  SetlistSong,
   DashboardData,
   DashboardStats,
   Gourmet,
@@ -23,6 +24,15 @@ export function listTrips(): Trip[] {
   return getDb()
     .prepare(`SELECT * FROM trips ORDER BY start_date DESC, id DESC`)
     .all() as Trip[];
+}
+
+export function listSetlist(): SetlistSong[] {
+  return getDb()
+    .prepare(
+      `SELECT * FROM setlist_songs
+       ORDER BY performed_on ASC, act_no ASC, song_no ASC`
+    )
+    .all() as SetlistSong[];
 }
 
 export function listGames(): BasketballGame[] {
@@ -91,6 +101,7 @@ export function getDashboardData(): DashboardData {
   return {
     gourmet: listGourmet(),
     trips: listTrips(),
+    setlist: listSetlist(),
     games: listGames(),
     watchLogs: listWatchLogs(),
     stats: getStats(),

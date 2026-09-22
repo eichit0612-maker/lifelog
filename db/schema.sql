@@ -43,6 +43,26 @@ CREATE TABLE IF NOT EXISTS trips (
 
 CREATE INDEX IF NOT EXISTS idx_trips_start_date ON trips (start_date DESC);
 
+-- 2-b. セットリスト（フェス・ライブで聴いた曲）
+--      旅行1件にぶら下がる。act_no は当日の出演順、song_no はその中の曲順。
+CREATE TABLE IF NOT EXISTS setlist_songs (
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  trip_id      INTEGER NOT NULL REFERENCES trips (id) ON DELETE CASCADE,
+  performed_on TEXT    NOT NULL CHECK (performed_on GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
+  act_no       INTEGER NOT NULL,                    -- その日の何組目か
+  artist       TEXT    NOT NULL,
+  stage        TEXT,                                -- 雷神STAGE / 風神STAGE など
+  song_no      INTEGER NOT NULL,                    -- そのアクトの何曲目か
+  title        TEXT    NOT NULL,
+  url          TEXT,                                -- 音源へのリンク（任意）
+  created_at   TEXT    NOT NULL DEFAULT (datetime('now', 'localtime')),
+  updated_at   TEXT    NOT NULL DEFAULT (datetime('now', 'localtime')),
+  UNIQUE (trip_id, performed_on, act_no, song_no)
+);
+
+CREATE INDEX IF NOT EXISTS idx_setlist_trip   ON setlist_songs (trip_id, performed_on, act_no, song_no);
+CREATE INDEX IF NOT EXISTS idx_setlist_artist ON setlist_songs (artist);
+
 -- ------------------------------------------------------------
 -- 3. バスケの試合予定・結果（日付、対戦相手、ステータス、スコア）
 --    観戦記録なので「どのチームを応援して観たか」を team に持つ。
@@ -122,6 +142,12 @@ CREATE TRIGGER IF NOT EXISTS trg_trips_updated_at
 AFTER UPDATE ON trips FOR EACH ROW
 BEGIN
   UPDATE trips SET updated_at = datetime('now', 'localtime') WHERE id = OLD.id;
+END;
+
+CREATE TRIGGER IF NOT EXISTS trg_setlist_songs_updated_at
+AFTER UPDATE ON setlist_songs FOR EACH ROW
+BEGIN
+  UPDATE setlist_songs SET updated_at = datetime('now', 'localtime') WHERE id = OLD.id;
 END;
 
 CREATE TRIGGER IF NOT EXISTS trg_games_updated_at

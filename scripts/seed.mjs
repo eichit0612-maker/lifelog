@@ -11,17 +11,22 @@ const root = process.cwd();
 const dbPath = process.env.LIFELOG_DB_PATH ?? path.join(root, "db", "lifelog.db");
 
 fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+const inazuma = JSON.parse(
+  fs.readFileSync(path.join(root, "db", "inazuma-2026.json"), "utf8")
+);
+
 const db = new Database(dbPath);
 db.pragma("journal_mode = WAL");
 db.exec(fs.readFileSync(path.join(root, "db", "schema.sql"), "utf8"));
 
 db.exec(`
+  DELETE FROM setlist_songs;
   DELETE FROM gourmet;
   DELETE FROM trips;
   DELETE FROM basketball_games;
   DELETE FROM watch_logs;
   DELETE FROM sqlite_sequence
-   WHERE name IN ('gourmet', 'trips', 'basketball_games', 'watch_logs');
+   WHERE name IN ('gourmet', 'trips', 'basketball_games', 'watch_logs', 'setlist_songs');
 `);
 
 // [店名, 場所, ジャンル, 評価, メモ, 訪問日]
@@ -45,8 +50,17 @@ const gourmet = [
   ],
 ];
 
-// 旅行はタブだけ用意して中身なし（あとから追加）
-const trips = [];
+// [見出し, 場所, 開始日, 終了日, メモ]
+// 感想は本人が書くものなのでメモは空にしてある。
+const trips = [
+  [
+    inazuma.trip.title,
+    inazuma.trip.place,
+    inazuma.trip.start_date,
+    inazuma.trip.end_date,
+    null,
+  ],
+];
 
 // 滋賀レイクス 2026-27 レギュラーシーズン全60試合。
 // 公式サイト https://shigalakes.com/schedule/list/ から取得（2026-09-12 時点）。
@@ -158,9 +172,41 @@ const insertWatch = db.prepare(
    VALUES (?, ?, ?, ?, ?, ?)`
 );
 
+const insertSong = db.prepare(
+  `INSERT INTO setlist_songs
+     (trip_id, performed_on, act_no, artist, stage, song_no, title, url)
+   VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+);
+
 db.transaction(() => {
   for (const row of gourmet) insertGourmet.run(...row);
-  for (const row of trips) insertTrip.run(...row);
+
+  let inazumaTripId = null;
+  for (const row of trips) {
+    const info = insertTrip.run(...row);
+    if (row[0] === inazuma.trip.title) inazumaTripId = info.lastInsertRowid;
+  }
+
+  // セットリスト。act_no は「その日の何組目か」なので日付ごとに振り直す。
+  if (inazumaTripId !== null) {
+    const actNoByDate = new Map();
+    for (const act of inazuma.acts) {
+      const actNo = (actNoByDate.get(act.date) ?? 0) + 1;
+      actNoByDate.set(act.date, actNo);
+      act.songs.forEach(([title, url], i) => {
+        insertSong.run(
+          inazumaTripId,
+          act.date,
+          actNo,
+          act.artist,
+          act.stage,
+          i + 1,
+          title,
+          url
+        );
+      });
+    }
+  }
   for (const row of games) insertGame.run(...row);
   for (const row of watchLogs) insertWatch.run(...row);
 })();
@@ -171,4 +217,5 @@ console.log(`  gourmet:          ${count("gourmet")}`);
 console.log(`  trips:            ${count("trips")}`);
 console.log(`  basketball_games: ${count("basketball_games")}`);
 console.log(`  watch_logs:       ${count("watch_logs")}`);
+console.log(`  setlist_songs:    ${count("setlist_songs")}`);
 db.close();
