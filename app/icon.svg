@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>記録帳</title>
+  <!--
+    少し開いた本。
+    ファビコンは 16px で描かれるので、線は太め・形は単純に保つ。
+    紙色で塗りつぶしてあるので、ブラウザのタブが明るくても暗くても形が出る。
+    開き具合は、本と分かる幅を残しつつ、のどが沈んで見える程度に浅くしてある。
+  -->
+  <g fill="#faf8f4" stroke="#221e18" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+    <!-- 左ページ -->
+    <path d="M16 12.6 C13.2 10.0 9.4 8.2 5.6 7.8 L5.6 20.2 C9.4 20.6 13.2 22.4 16 25.0 Z" />
+    <!-- 右ページ -->
+    <path d="M16 12.6 C18.8 10.0 22.6 8.2 26.4 7.8 L26.4 20.2 C22.6 20.6 18.8 22.4 16 25.0 Z" />
+  </g>
+  <!-- のど（綴じ目）。差し色の朱はここだけに使う -->
+  <path d="M16 12.6 L16 25.0" fill="none" stroke="#a8432c" stroke-width="2.2" stroke-linecap="round" />
+</svg>
