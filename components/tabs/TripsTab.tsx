@@ -102,12 +102,37 @@ function ActBlock({ act }: { act: Act }) {
 
 function Setlist({ songs }: { songs: SetlistSong[] }) {
   const days = byDay(songs);
+  const actCount = days.reduce((n, d) => n + d.acts.length, 0);
+
   return (
-    <div className="mt-6">
-      <h4 className="latin mb-3 text-xs uppercase tracking-[0.22em] text-ink-faint">
-        Setlist
-      </h4>
-      <div className="space-y-6">
+    // セットリスト全体もたたんでおく。開きっぱなしだと1件で画面が埋まり、
+    // 他の旅行記録が見えなくなるため。
+    <details className="group/all mt-5">
+      <summary
+        className="flex cursor-pointer list-none items-baseline gap-3 border-y border-rule py-2
+                   [&::-webkit-details-marker]:hidden"
+      >
+        <span className="latin text-xs uppercase tracking-[0.22em] text-ink-muted">
+          Setlist
+        </span>
+        <span className="text-xs text-ink-faint">
+          {actCount}アクト / {songs.length}曲
+        </span>
+        <span
+          aria-hidden
+          className="ml-auto w-3 text-center text-xs text-ink-faint group-open/all:hidden"
+        >
+          ＋
+        </span>
+        <span
+          aria-hidden
+          className="ml-auto hidden w-3 text-center text-xs text-ink-faint group-open/all:inline"
+        >
+          −
+        </span>
+      </summary>
+
+      <div className="space-y-6 pt-4">
         {days.map((day, i) => (
           <div key={day.date}>
             <h5 className="mincho mb-1 border-b border-rule-firm pb-1 text-xs text-ink-muted">
@@ -122,7 +147,7 @@ function Setlist({ songs }: { songs: SetlistSong[] }) {
           </div>
         ))}
       </div>
-    </div>
+    </details>
   );
 }
 
