@@ -49,8 +49,12 @@ export function listTripRaces(): TripRace[] {
       `SELECT * FROM trip_races
        ORDER BY trip_id, race_date ASC, post_time ASC, race_no ASC`
     )
-    .all() as (Omit<TripRace, "placings"> & { placings: string })[];
-  return rows.map((r) => ({ ...r, placings: JSON.parse(r.placings) }));
+    .all() as (Omit<TripRace, "placings" | "bets"> & { placings: string; bets: string })[];
+  return rows.map((r) => ({
+    ...r,
+    placings: JSON.parse(r.placings),
+    bets: JSON.parse(r.bets),
+  }));
 }
 
 export function listGames(): BasketballGame[] {

@@ -240,30 +240,34 @@ function RaceCard({ race }: { race: TripRace }) {
         </tbody>
       </table>
 
-      {race.hit && (
-        <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-l-2 border-accent pl-3 text-sm">
-          <span className="mincho text-accent">的中</span>
-          {race.bettor && <span className="text-xs text-ink-muted">{race.bettor}</span>}
-          <span>
-            {race.bet_type}
-            <span className="latin ml-1.5 tabular-nums">{race.hit}</span>
-          </span>
-          {race.bet_detail && (
-            <span className="text-xs text-ink-faint">{race.bet_detail}</span>
-          )}
-          <span className="ml-auto flex items-baseline gap-3 text-xs text-ink-muted">
-            {race.dividend_yen && (
-              <span>
-                配当 <span className="latin text-sm text-ink">{yen(race.dividend_yen)}</span>
-              </span>
+      {race.bets.length > 0 && (
+        <div className="mt-3 border-l-2 border-accent pl-3 text-sm">
+          <ul className="space-y-1">
+            {race.bets.map((b, i) => (
+              <li key={i} className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+                <span className="mincho text-accent">的中</span>
+                {b.bettor && <span className="text-xs text-ink-muted">{b.bettor}</span>}
+                <span>
+                  {b.type}
+                  <span className="latin ml-1.5 tabular-nums">{b.hit}</span>
+                </span>
+                {b.detail && <span className="text-xs text-ink-faint">{b.detail}</span>}
+                {b.dividend_yen && (
+                  <span className="ml-auto text-xs text-ink-muted">
+                    配当 <span className="latin text-sm text-ink">{yen(b.dividend_yen)}</span>
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+          {/* 1枚だけで配当と同額なら重ねて出さない */}
+          {race.returned_yen &&
+            !(race.bets.length === 1 && race.returned_yen === race.bets[0].dividend_yen) && (
+              <p className="mt-1.5 border-t border-rule pt-1.5 text-right text-xs text-ink-muted">
+                払戻 計
+                <span className="latin ml-1.5 text-sm text-ink">{yen(race.returned_yen)}</span>
+              </p>
             )}
-            {/* 100円1点の的中なら配当と同額になるので重ねて出さない */}
-            {race.returned_yen && race.returned_yen !== race.dividend_yen && (
-              <span>
-                払戻 <span className="latin text-sm text-ink">{yen(race.returned_yen)}</span>
-              </span>
-            )}
-          </span>
         </div>
       )}
 

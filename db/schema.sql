@@ -86,7 +86,8 @@ CREATE INDEX IF NOT EXISTS idx_trip_photos_trip ON trip_photos (trip_id, sort_no
 
 -- 2-d. 旅行先で観たレース（競馬など）
 --      着順・配当は公開されている結果から取ったもの。推測では埋めない。
---      bettor 以下は自分たちの馬券。買っていないレースなら NULL。
+--      bets は自分たちの当たり馬券。1レースで複数買うことがあるので配列で持つ。
+--      買っていない・外れたレースなら空配列。
 CREATE TABLE IF NOT EXISTS trip_races (
   id           INTEGER PRIMARY KEY AUTOINCREMENT,
   trip_id      INTEGER NOT NULL REFERENCES trips (id) ON DELETE CASCADE,
@@ -100,12 +101,10 @@ CREATE TABLE IF NOT EXISTS trip_races (
   conditions   TEXT,                                -- 晴・良
   post_time    TEXT    CHECK (post_time IS NULL OR post_time GLOB '[0-2][0-9]:[0-5][0-9]'),
   placings     TEXT    NOT NULL CHECK (json_valid(placings)),  -- 上位の着順 [{pos,no,name,jockey,pop,time,margin}]
-  bettor       TEXT,                                -- 自分 / 友達
-  bet_type     TEXT,                                -- 馬連 / 3連単 …
-  bet_detail   TEXT,                                -- ボックスの馬番など
-  hit          TEXT,                                -- 的中した組み合わせ
-  dividend_yen INTEGER CHECK (dividend_yen IS NULL OR dividend_yen > 0),  -- 100円あたりの配当
-  returned_yen INTEGER CHECK (returned_yen IS NULL OR returned_yen > 0),  -- 実際の払戻額
+  bets         TEXT    NOT NULL DEFAULT '[]' CHECK (json_valid(bets)),
+                                                    -- [{bettor,type,detail,hit,dividend_yen}]
+                                                    -- dividend_yen は100円あたりの配当
+  returned_yen INTEGER CHECK (returned_yen IS NULL OR returned_yen > 0),  -- そのレースの実際の払戻額（合計）
   photo        TEXT,                                -- 関連する写真（trip_photos.src）
   source_url   TEXT,                                -- 結果の出典
   created_at   TEXT    NOT NULL DEFAULT (datetime('now', 'localtime')),

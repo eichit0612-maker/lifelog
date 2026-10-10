@@ -1,6 +1,6 @@
 {
   "_source": "写真: 利用者の Google ドライブ「旅行_衛市/2026-10-03_京都競馬場」（2026-10-10 取り込み）。レース結果: netkeiba データベース（各レースの source_url）",
-  "_note": "写真は長辺1600px（一覧用は640px）に縮小し、EXIF（撮影位置など）を除いて public/ に置いた。キャプションは元のファイル名から。taken_at は EXIF の撮影時刻。馬券の内容は払い戻し画面の写真から読んだもので、読み取れない部分は書いていない。",
+  "_note": "写真は長辺1600px（一覧用は640px）に縮小し、EXIF（撮影位置など）を除いて public/ に置いた。キャプションは元のファイル名から。taken_at は EXIF の撮影時刻。馬券の内容は払い戻し画面の写真から読んだもので、読み取れない部分は書いていない。6R は利用者から「3連複＋馬連」と聞き、結果の配当（18,960円＋2,480円＝21,440円）が払戻額と一致することを確かめた。",
   "trip": {
     "title": "京都競馬場_遊び",
     "place": "京都府京都市伏見区 京都競馬場",
@@ -84,7 +84,7 @@
       "src": "/trips/2026-10-03-kyoto-keiba/haraimodoshi-6r.jpg",
       "thumb_src": "/trips/2026-10-03-kyoto-keiba/haraimodoshi-6r-s.jpg",
       "scene": "京都競馬場",
-      "caption": "払い戻し（6R 馬連）",
+      "caption": "払い戻し（6R 馬連・3連複）",
       "taken_at": "12:49",
       "width": 1600,
       "height": 1200
@@ -211,11 +211,22 @@
           "margin": "ハナ"
         }
       ],
-      "bettor": "自分",
-      "bet_type": "馬連",
-      "bet_detail": null,
-      "hit": "1-10",
-      "dividend_yen": 2480,
+      "bets": [
+        {
+          "bettor": "自分",
+          "type": "馬連",
+          "detail": null,
+          "hit": "1-10",
+          "dividend_yen": 2480
+        },
+        {
+          "bettor": "自分",
+          "type": "3連複",
+          "detail": null,
+          "hit": "1-10-12",
+          "dividend_yen": 18960
+        }
+      ],
       "returned_yen": 21440,
       "photo": "/trips/2026-10-03-kyoto-keiba/haraimodoshi-6r.jpg",
       "source_url": "https://db.netkeiba.com/race/202608040106/"
@@ -259,11 +270,15 @@
           "margin": "クビ"
         }
       ],
-      "bettor": "友達",
-      "bet_type": "3連単",
-      "bet_detail": "ボックス 3・6・8・10・18（60点）",
-      "hit": "6-18-8",
-      "dividend_yen": 38250,
+      "bets": [
+        {
+          "bettor": "友達",
+          "type": "3連単",
+          "detail": "ボックス 3・6・8・10・18（60点）",
+          "hit": "6-18-8",
+          "dividend_yen": 38250
+        }
+      ],
       "returned_yen": 38250,
       "photo": "/trips/2026-10-03-kyoto-keiba/haraimodoshi-11r.jpg",
       "source_url": "https://db.netkeiba.com/race/202608040111/"

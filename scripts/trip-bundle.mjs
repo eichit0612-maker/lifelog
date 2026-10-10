@@ -25,13 +25,6 @@ export function insertTripBundle(db, bundle) {
        (trip_id, sort_no, src, thumb_src, scene, caption, taken_at, width, height)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
   );
-  const insertRace = db.prepare(
-    `INSERT INTO trip_races
-       (trip_id, race_date, course, meeting, race_no, race_name, grade, track, conditions,
-        post_time, placings, bettor, bet_type, bet_detail, hit, dividend_yen, returned_yen,
-        photo, source_url)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  );
 
   return db.transaction(() => {
     // 感想は本人が書くものなので memo は空のまま入れる。
@@ -57,29 +50,36 @@ export function insertTripBundle(db, bundle) {
       );
     });
 
-    for (const r of races) {
-      insertRace.run(
-        tripId,
-        r.race_date,
-        r.course,
-        r.meeting ?? null,
-        r.race_no,
-        r.race_name,
-        r.grade ?? null,
-        r.track ?? null,
-        r.conditions ?? null,
-        r.post_time ?? null,
-        JSON.stringify(r.placings),
-        r.bettor ?? null,
-        r.bet_type ?? null,
-        r.bet_detail ?? null,
-        r.hit ?? null,
-        r.dividend_yen ?? null,
-        r.returned_yen ?? null,
-        r.photo ?? null,
-        r.source_url ?? null
-      );
-    }
+    insertRaces(db, tripId, races);
     return tripId;
   })();
+}
+
+/** レースを入れる。trip_races の作り直し（列の変更）でも使う。 */
+export function insertRaces(db, tripId, races) {
+  const insertRace = db.prepare(
+    `INSERT INTO trip_races
+       (trip_id, race_date, course, meeting, race_no, race_name, grade, track, conditions,
+        post_time, placings, bets, returned_yen, photo, source_url)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  );
+  for (const r of races) {
+    insertRace.run(
+      tripId,
+      r.race_date,
+      r.course,
+      r.meeting ?? null,
+      r.race_no,
+      r.race_name,
+      r.grade ?? null,
+      r.track ?? null,
+      r.conditions ?? null,
+      r.post_time ?? null,
+      JSON.stringify(r.placings),
+      JSON.stringify(r.bets ?? []),
+      r.returned_yen ?? null,
+      r.photo ?? null,
+      r.source_url ?? null
+    );
+  }
 }

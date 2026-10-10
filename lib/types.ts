@@ -67,7 +67,16 @@ export type RacePlacing = {
   margin: string | null;
 };
 
-/** trip_races の行。placings は JSON 文字列のままでなく、読み出し時に配列へ戻す。 */
+/** trip_races.bets の1要素。当たった馬券1枚。 */
+export type RaceBet = {
+  bettor: string | null;
+  type: string;
+  detail: string | null;
+  hit: string;
+  dividend_yen: number | null;
+};
+
+/** trip_races の行。placings / bets は JSON 文字列のままでなく、読み出し時に配列へ戻す。 */
 export type TripRace = {
   id: number;
   trip_id: number;
@@ -81,11 +90,7 @@ export type TripRace = {
   conditions: string | null;
   post_time: string | null;
   placings: RacePlacing[];
-  bettor: string | null;
-  bet_type: string | null;
-  bet_detail: string | null;
-  hit: string | null;
-  dividend_yen: number | null;
+  bets: RaceBet[];
   returned_yen: number | null;
   photo: string | null;
   source_url: string | null;
