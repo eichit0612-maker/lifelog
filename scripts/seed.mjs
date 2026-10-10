@@ -6,6 +6,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import Database from "better-sqlite3";
+import { insertTripBundle, readBundle } from "./trip-bundle.mjs";
 
 const root = process.cwd();
 const dbPath = process.env.LIFELOG_DB_PATH ?? path.join(root, "db", "lifelog.db");
@@ -14,19 +15,27 @@ fs.mkdirSync(path.dirname(dbPath), { recursive: true });
 const inazuma = JSON.parse(
   fs.readFileSync(path.join(root, "db", "inazuma-2026.json"), "utf8")
 );
+// 写真・レースつきの旅行。JSON 1件 = 旅行1件。
+const tripBundles = ["kyoto-keiba-2026-10-03.json"].map((f) =>
+  readBundle(path.join(root, "db", f))
+);
 
 const db = new Database(dbPath);
 db.pragma("journal_mode = WAL");
 db.exec(fs.readFileSync(path.join(root, "db", "schema.sql"), "utf8"));
 
+db.pragma("foreign_keys = ON");
 db.exec(`
+  DELETE FROM trip_races;
+  DELETE FROM trip_photos;
   DELETE FROM setlist_songs;
   DELETE FROM gourmet;
   DELETE FROM trips;
   DELETE FROM basketball_games;
   DELETE FROM watch_logs;
   DELETE FROM sqlite_sequence
-   WHERE name IN ('gourmet', 'trips', 'basketball_games', 'watch_logs', 'setlist_songs');
+   WHERE name IN ('gourmet', 'trips', 'basketball_games', 'watch_logs', 'setlist_songs',
+                  'trip_photos', 'trip_races');
 `);
 
 // [店名, 場所, ジャンル, 評価, メモ, 訪問日]
@@ -207,6 +216,7 @@ db.transaction(() => {
       });
     }
   }
+  for (const bundle of tripBundles) insertTripBundle(db, bundle);
   for (const row of games) insertGame.run(...row);
   for (const row of watchLogs) insertWatch.run(...row);
 })();
@@ -218,4 +228,6 @@ console.log(`  trips:            ${count("trips")}`);
 console.log(`  basketball_games: ${count("basketball_games")}`);
 console.log(`  watch_logs:       ${count("watch_logs")}`);
 console.log(`  setlist_songs:    ${count("setlist_songs")}`);
+console.log(`  trip_photos:      ${count("trip_photos")}`);
+console.log(`  trip_races:       ${count("trip_races")}`);
 db.close();

@@ -7,6 +7,8 @@ import type {
   DashboardStats,
   Gourmet,
   Trip,
+  TripPhoto,
+  TripRace,
   WatchLog,
 } from "./types";
 
@@ -33,6 +35,22 @@ export function listSetlist(): SetlistSong[] {
        ORDER BY performed_on ASC, act_no ASC, song_no ASC`
     )
     .all() as SetlistSong[];
+}
+
+export function listTripPhotos(): TripPhoto[] {
+  return getDb()
+    .prepare(`SELECT * FROM trip_photos ORDER BY trip_id, sort_no`)
+    .all() as TripPhoto[];
+}
+
+export function listTripRaces(): TripRace[] {
+  const rows = getDb()
+    .prepare(
+      `SELECT * FROM trip_races
+       ORDER BY trip_id, race_date ASC, post_time ASC, race_no ASC`
+    )
+    .all() as (Omit<TripRace, "placings"> & { placings: string })[];
+  return rows.map((r) => ({ ...r, placings: JSON.parse(r.placings) }));
 }
 
 export function listGames(): BasketballGame[] {
@@ -102,6 +120,8 @@ export function getDashboardData(): DashboardData {
     gourmet: listGourmet(),
     trips: listTrips(),
     setlist: listSetlist(),
+    tripPhotos: listTripPhotos(),
+    tripRaces: listTripRaces(),
     games: listGames(),
     watchLogs: listWatchLogs(),
     stats: getStats(),

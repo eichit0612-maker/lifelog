@@ -1,5 +1,6 @@
-import type { SetlistSong, Trip } from "@/lib/types";
+import type { SetlistSong, Trip, TripPhoto, TripRace } from "@/lib/types";
 import { DateRange, EmptyNote, Index, SectionHead, Tag } from "../ui";
+import TripRecord from "./TripRecord";
 
 const DOW = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -154,9 +155,13 @@ function Setlist({ songs }: { songs: SetlistSong[] }) {
 export default function TripsTab({
   items,
   setlist,
+  photos,
+  races,
 }: {
   items: Trip[];
   setlist: SetlistSong[];
+  photos: TripPhoto[];
+  races: TripRace[];
 }) {
   return (
     <section>
@@ -167,6 +172,8 @@ export default function TripsTab({
         <ol className="border-t border-rule">
           {items.map((t, i) => {
             const songs = setlist.filter((s) => s.trip_id === t.id);
+            const tripPhotos = photos.filter((p) => p.trip_id === t.id);
+            const tripRaces = races.filter((r) => r.trip_id === t.id);
             return (
               <li
                 key={t.id}
@@ -189,6 +196,7 @@ export default function TripsTab({
                     <Tag>{t.place}</Tag>
                     <Tag>{nights(t.start_date, t.end_date)}</Tag>
                     {songs.length > 0 && <Tag>{songs.length}曲</Tag>}
+                    {tripPhotos.length > 0 && <Tag>写真{tripPhotos.length}枚</Tag>}
                   </div>
 
                   {t.memo && (
@@ -198,6 +206,7 @@ export default function TripsTab({
                   )}
 
                   {songs.length > 0 && <Setlist songs={songs} />}
+                  <TripRecord photos={tripPhotos} races={tripRaces} />
                 </div>
               </li>
             );

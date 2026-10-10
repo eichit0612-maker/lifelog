@@ -114,7 +114,12 @@ export default function Dashboard({
       >
         {tab === "gourmet" && <GourmetTab items={data.gourmet} />}
         {tab === "trips" && (
-          <TripsTab items={data.trips} setlist={data.setlist} />
+          <TripsTab
+            items={data.trips}
+            setlist={data.setlist}
+            photos={data.tripPhotos}
+            races={data.tripRaces}
+          />
         )}
         {tab === "basketball" && <BasketballTab items={data.games} />}
         {tab === "watch" && <WatchTab items={data.watchLogs} />}

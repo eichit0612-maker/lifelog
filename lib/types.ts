@@ -41,6 +41,58 @@ export type SetlistSong = {
   updated_at: string;
 };
 
+export type TripPhoto = {
+  id: number;
+  trip_id: number;
+  sort_no: number;
+  src: string;
+  thumb_src: string | null;
+  scene: string | null;
+  caption: string | null;
+  taken_at: string | null;
+  width: number | null;
+  height: number | null;
+  created_at: string;
+  updated_at: string;
+};
+
+/** trip_races.placings の1要素。 */
+export type RacePlacing = {
+  pos: number;
+  no: number;
+  name: string;
+  jockey: string | null;
+  pop: number | null;
+  time: string | null;
+  margin: string | null;
+};
+
+/** trip_races の行。placings は JSON 文字列のままでなく、読み出し時に配列へ戻す。 */
+export type TripRace = {
+  id: number;
+  trip_id: number;
+  race_date: string;
+  course: string;
+  meeting: string | null;
+  race_no: number;
+  race_name: string;
+  grade: string | null;
+  track: string | null;
+  conditions: string | null;
+  post_time: string | null;
+  placings: RacePlacing[];
+  bettor: string | null;
+  bet_type: string | null;
+  bet_detail: string | null;
+  hit: string | null;
+  dividend_yen: number | null;
+  returned_yen: number | null;
+  photo: string | null;
+  source_url: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export type BasketballGame = {
   id: number;
   game_date: string;
@@ -87,6 +139,8 @@ export type DashboardData = {
   gourmet: Gourmet[];
   trips: Trip[];
   setlist: SetlistSong[];
+  tripPhotos: TripPhoto[];
+  tripRaces: TripRace[];
   games: BasketballGame[];
   watchLogs: WatchLog[];
   stats: DashboardStats;

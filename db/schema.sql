@@ -63,6 +63,58 @@ CREATE TABLE IF NOT EXISTS setlist_songs (
 CREATE INDEX IF NOT EXISTS idx_setlist_trip   ON setlist_songs (trip_id, performed_on, act_no, song_no);
 CREATE INDEX IF NOT EXISTS idx_setlist_artist ON setlist_songs (artist);
 
+-- 2-c. 旅行の写真
+--      画像そのものは public/ に置き、ここにはパスだけ持つ。
+--      src は basePath を含まないサイトルートからのパス（/trips/...）。
+CREATE TABLE IF NOT EXISTS trip_photos (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  trip_id     INTEGER NOT NULL REFERENCES trips (id) ON DELETE CASCADE,
+  sort_no     INTEGER NOT NULL,                     -- 表示順（撮影順）
+  src         TEXT    NOT NULL,                     -- 拡大表示用
+  thumb_src   TEXT,                                 -- 一覧用の縮小版（無ければ src）
+  scene       TEXT,                                 -- 「京都競馬場」など。一覧で見出しにする
+  caption     TEXT,
+  taken_at    TEXT    CHECK (taken_at IS NULL OR taken_at GLOB '[0-2][0-9]:[0-5][0-9]'),
+  width       INTEGER,                              -- 縦横比を先に確保してレイアウトのずれを防ぐ
+  height      INTEGER,
+  created_at  TEXT    NOT NULL DEFAULT (datetime('now', 'localtime')),
+  updated_at  TEXT    NOT NULL DEFAULT (datetime('now', 'localtime')),
+  UNIQUE (trip_id, sort_no)
+);
+
+CREATE INDEX IF NOT EXISTS idx_trip_photos_trip ON trip_photos (trip_id, sort_no);
+
+-- 2-d. 旅行先で観たレース（競馬など）
+--      着順・配当は公開されている結果から取ったもの。推測では埋めない。
+--      bettor 以下は自分たちの馬券。買っていないレースなら NULL。
+CREATE TABLE IF NOT EXISTS trip_races (
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  trip_id      INTEGER NOT NULL REFERENCES trips (id) ON DELETE CASCADE,
+  race_date    TEXT    NOT NULL CHECK (race_date GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
+  course       TEXT    NOT NULL,                    -- 京都 / 阪神 …
+  meeting      TEXT,                                -- 4回京都1日目
+  race_no      INTEGER NOT NULL CHECK (race_no BETWEEN 1 AND 12),
+  race_name    TEXT    NOT NULL,
+  grade        TEXT,                                -- G1 / G2 / G3 / L
+  track        TEXT,                                -- 芝右1200m
+  conditions   TEXT,                                -- 晴・良
+  post_time    TEXT    CHECK (post_time IS NULL OR post_time GLOB '[0-2][0-9]:[0-5][0-9]'),
+  placings     TEXT    NOT NULL CHECK (json_valid(placings)),  -- 上位の着順 [{pos,no,name,jockey,pop,time,margin}]
+  bettor       TEXT,                                -- 自分 / 友達
+  bet_type     TEXT,                                -- 馬連 / 3連単 …
+  bet_detail   TEXT,                                -- ボックスの馬番など
+  hit          TEXT,                                -- 的中した組み合わせ
+  dividend_yen INTEGER CHECK (dividend_yen IS NULL OR dividend_yen > 0),  -- 100円あたりの配当
+  returned_yen INTEGER CHECK (returned_yen IS NULL OR returned_yen > 0),  -- 実際の払戻額
+  photo        TEXT,                                -- 関連する写真（trip_photos.src）
+  source_url   TEXT,                                -- 結果の出典
+  created_at   TEXT    NOT NULL DEFAULT (datetime('now', 'localtime')),
+  updated_at   TEXT    NOT NULL DEFAULT (datetime('now', 'localtime')),
+  UNIQUE (trip_id, race_date, course, race_no)
+);
+
+CREATE INDEX IF NOT EXISTS idx_trip_races_trip ON trip_races (trip_id, race_date, race_no);
+
 -- ------------------------------------------------------------
 -- 3. バスケの試合予定・結果（日付、対戦相手、ステータス、スコア）
 --    観戦記録なので「どのチームを応援して観たか」を team に持つ。
@@ -148,6 +200,18 @@ CREATE TRIGGER IF NOT EXISTS trg_setlist_songs_updated_at
 AFTER UPDATE ON setlist_songs FOR EACH ROW
 BEGIN
   UPDATE setlist_songs SET updated_at = datetime('now', 'localtime') WHERE id = OLD.id;
+END;
+
+CREATE TRIGGER IF NOT EXISTS trg_trip_photos_updated_at
+AFTER UPDATE ON trip_photos FOR EACH ROW
+BEGIN
+  UPDATE trip_photos SET updated_at = datetime('now', 'localtime') WHERE id = OLD.id;
+END;
+
+CREATE TRIGGER IF NOT EXISTS trg_trip_races_updated_at
+AFTER UPDATE ON trip_races FOR EACH ROW
+BEGIN
+  UPDATE trip_races SET updated_at = datetime('now', 'localtime') WHERE id = OLD.id;
 END;
 
 CREATE TRIGGER IF NOT EXISTS trg_games_updated_at
